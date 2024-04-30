@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:SpecificExplorer"
         xmlns:mvvm="clr-namespace:SpecificExplorer.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="450" Width="800"
+        MinHeight="200" MinWidth="510">
     <Window.DataContext>
         <mvvm:MainViewModel/>
     </Window.DataContext>
@@ -42,7 +44,7 @@
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="100"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
@@ -57,7 +59,7 @@
                 <GroupBox Header="Ordner zum Sortieren" Grid.Row="0">
                     <Grid Grid.Row="0">
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
+                            <RowDefinition Height="19"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
 
@@ -86,6 +88,42 @@
                     </Grid>
                 </GroupBox>
                 <!--#endregion-->
+
+                <!--#region Up Right-->
+                <GroupBox Header="Ziel" Grid.Column="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="19"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <!--Destination Folder with Button-->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="Test" Grid.Column="0"/>
+                            <Button Content="Suchen..." Grid.Column="1"/>
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+                <!--#endregion-->
+
+            </Grid>
+            <!--#endregion-->
+
+
+            <!--#region Lower half-->
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="19"/>
+                </Grid.RowDefinitions>
+                
+                
+                
+                <!--Buttons-->
+                <Button Grid.Row="1" Content="Go"/>
             </Grid>
             <!--#endregion-->
         </Grid>
