@@ -24,7 +24,7 @@
         </Menu>
         <!--#endregion-->
         <!--#region Statusbar-->
-        <Grid x:Name="StatusGrid" Grid.Row="2" Background="#FF1274CA">
+        <Grid x:Name="StatusGrid" Grid.Row="2" Background="#FFC8FFC8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="1"/>
@@ -39,5 +39,56 @@
             <StatusBar Grid.Column="4" x:Name="Status3" Background="{Binding Background, ElementName=StatusGrid}"/>
         </Grid>
         <!--#endregion-->
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--#region Upper half-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <!--#region Up Left-->
+                <GroupBox Header="Ordner zum Sortieren" Grid.Row="0">
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <!--Source Folder with Button-->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="Test" Grid.Column="0"/>
+                            <Button Content="Suchen..." Grid.Column="1"/>
+                        </Grid>
+                        <!--Found Folders and Files-->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox Header="Gefundene Ordner" Grid.Column="0">
+                                <TextBlock Text="Text" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </GroupBox>
+                            <GroupBox Header="Gefundene Ordner" Grid.Column="1">
+                                <TextBlock Text="Text" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </GroupBox>
+                        </Grid>
+                    </Grid>
+                </GroupBox>
+                <!--#endregion-->
+            </Grid>
+            <!--#endregion-->
+        </Grid>
+
     </Grid>
 </Window>
