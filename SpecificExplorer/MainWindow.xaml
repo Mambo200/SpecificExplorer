@@ -7,6 +7,33 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="19"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <!--#region Header-->
+        <Menu Grid.Row="0">
+            <MenuItem Header="_Datei">
+                <MenuItem Header="_Beenden"/>
+            </MenuItem>
+        </Menu>
+        <!--#endregion-->
+        <!--#region Statusbar-->
+        <Grid x:Name="StatusGrid" Grid.Row="2" Background="#FF1274CA">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <StatusBar Grid.Column="0" x:Name="Status1" Background="{Binding Background, ElementName=StatusGrid}"/>
+            <Rectangle Grid.Column="1" VerticalAlignment="Stretch" Fill="Blue" Width="1"/>
+            <StatusBar Grid.Column="2" x:Name="Status2" Background="{Binding Background, ElementName=StatusGrid}"/>
+            <Rectangle Grid.Column="3" VerticalAlignment="Stretch" Fill="Blue" Width="1"/>
+            <StatusBar Grid.Column="4" x:Name="Status3" Background="{Binding Background, ElementName=StatusGrid}"/>
+        </Grid>
+        <!--#endregion-->
     </Grid>
 </Window>
