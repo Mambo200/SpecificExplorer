@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,7 +40,14 @@ namespace SpecificExplorer.ViewModel
         }
         private void SelectSourceFolderExecute(object _param)
         {
-            throw new System.NotImplementedException();
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                EnsurePathExists = true
+            };
+            CommonFileDialogResult res = dialog.ShowDialog();
+            if (res != CommonFileDialogResult.Ok)
+                return;
         }
 
         private int m_FoundFolder;
@@ -104,6 +112,36 @@ namespace SpecificExplorer.ViewModel
         private void CopyFilesExecute(object _param)
         {
             throw new System.NotImplementedException();
+        }
+
+        private string m_Status1;
+        public string Status1
+        {
+            get => m_Status1;
+            set
+            {
+                SetProperty(ref m_Status1, value);
+            }
+        }
+
+        private string m_Status2;
+        public string Status2
+        {
+            get => m_Status2;
+            set
+            {
+                SetProperty(ref m_Status2, value);
+            }
+        }
+
+        private string m_Status3;
+        public string Status3
+        {
+            get => m_Status3;
+            set
+            {
+                SetProperty(ref m_Status3, value);
+            }
         }
     }
 }

@@ -34,11 +34,11 @@
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
-            <StatusBar Grid.Column="0" x:Name="Status1" Background="{Binding Background, ElementName=StatusGrid}"/>
+            <Label Grid.Column="0" x:Name="Status1" Content="{Binding Status1}" Background="{Binding Background, ElementName=StatusGrid}"/>
             <Rectangle Grid.Column="1" VerticalAlignment="Stretch" Fill="Blue" Width="1"/>
-            <StatusBar Grid.Column="2" x:Name="Status2" Background="{Binding Background, ElementName=StatusGrid}"/>
+            <Label Grid.Column="2" x:Name="Status2" Content="{Binding Status2}" Background="{Binding Background, ElementName=StatusGrid}"/>
             <Rectangle Grid.Column="3" VerticalAlignment="Stretch" Fill="Blue" Width="1"/>
-            <StatusBar Grid.Column="4" x:Name="Status3" Background="{Binding Background, ElementName=StatusGrid}"/>
+            <Label Grid.Column="4" x:Name="Status3" Content="{Binding Status3}" Background="{Binding Background, ElementName=StatusGrid}"/>
         </Grid>
         <!--#endregion-->
 
