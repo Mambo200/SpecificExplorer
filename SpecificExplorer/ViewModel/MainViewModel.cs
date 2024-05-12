@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace SpecificExplorer.ViewModel
 {
@@ -31,7 +32,7 @@ namespace SpecificExplorer.ViewModel
         Thread copyThread = null;
         public void CloseWindow()
         {
-            if(copyThread != null
+            if (copyThread != null
                 && copyThread.ThreadState == ThreadState.Running)
             {
                 copyThread.Abort();
@@ -51,7 +52,29 @@ namespace SpecificExplorer.ViewModel
 
                 SetProperty(ref m_SourceFolder, value);
                 NotifyOfPropertyChange(nameof(CanCopy));
+
+                if (!Directory.Exists(value))
+                    return;
             }
+        }
+
+        [Obsolete("Not finished Meshod", true)]
+        private string[] GetAllFolders(string _directorypath)
+        {
+            string[] topDirectoryFolders = Directory.GetDirectories(_directorypath, "*", SearchOption.TopDirectoryOnly);
+            List<string> result = new List<string>();
+            for (int i = 0; i < topDirectoryFolders.Length; i++)
+            {
+                DirectoryInfo info = new DirectoryInfo(topDirectoryFolders[i]);
+                if (!info.Attributes.HasFlag(System.IO.FileAttributes.System))
+                    result.Add(topDirectoryFolders[i]);
+            }
+            return result.ToArray();
+        }
+        [Obsolete("Not finished Meshod", true)]
+        private string[] GetAllFiles(string _folderPath)
+        {
+            return null;
         }
 
         private ICommand m_SelectSourceFolder;
@@ -179,7 +202,7 @@ namespace SpecificExplorer.ViewModel
                 return;
             }
 
-            
+
             copyThread = new Thread((o) => CopyAll());
             copyThread.Start();
         }
@@ -251,7 +274,29 @@ namespace SpecificExplorer.ViewModel
             #region content of copying
             //System.Threading.Thread.Sleep(5000);
             DirectoryInfo MainFolder = Directory.CreateDirectory(Path.Combine(SourceFolder, COPYFOLDERNAME));
-            string[] allFiles = Directory.GetFiles(SourceFolder, "*", SearchOption.AllDirectories);
+            string[] allFiles = null;
+            try
+            {
+                allFiles = Directory.GetFiles(SourceFolder, "*", SearchOption.AllDirectories);
+            }
+            catch (Exception _ex)
+            {
+                StatusProgressState = TaskbarItemProgressState.Error;
+                MessageBox.Show($"Ein Fehler ist aufgetreten beim Suchen der Dateien:" + Environment.NewLine + Environment.NewLine + _ex.Message,
+                    "Kopieren abgebrochen",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Stop);
+
+                // make possible actions by user possible again
+                IsCopying = false;
+                NotifyOfPropertyChange(nameof(CanCopy));
+
+                // Update UI
+                StatusProgressState = TaskbarItemProgressState.None;
+                StatusProgressValue = 0;
+
+                return;
+            }
             int allFilesLength = allFiles.Length;
             int count = 0;
             foreach (string file in allFiles)
@@ -273,7 +318,10 @@ namespace SpecificExplorer.ViewModel
                     catch (Exception _ex)
                     {
                         StatusProgressState = TaskbarItemProgressState.Error;
-                        MessageBox.Show($"Ein Fehler ist aufgetreten beim Erstellen des Ordners \"{folderToCopy}\":" + Environment.NewLine + Environment.NewLine + _ex.Message);
+                        MessageBox.Show($"Ein Fehler ist aufgetreten beim Erstellen des Ordners \"{folderToCopy}\":" + Environment.NewLine + Environment.NewLine + _ex.Message, "Kopieren abgebrochen",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Stop);
+
                         break;
                     }
                 }
@@ -293,11 +341,15 @@ namespace SpecificExplorer.ViewModel
                 catch (Exception _ex)
                 {
                     StatusProgressState = TaskbarItemProgressState.Error;
-                    MessageBox.Show($"Ein Fehler ist aufgetreten beim Kopieren:" + Environment.NewLine + Environment.NewLine + _ex.Message);
+                    MessageBox.Show($"Ein Fehler ist aufgetreten beim Kopieren:" + Environment.NewLine + Environment.NewLine + _ex.Message,
+                        "Kopieren abgebrochen",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Stop);
+                    ;
                     break;
 
                 }
-                
+
                 StatusProgressValue = ((double)count / (double)allFilesLength);
                 System.Threading.Thread.Sleep(1);
             }

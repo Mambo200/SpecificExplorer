@@ -78,7 +78,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding SourceFolder, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" IsEnabled="{Binding IsCopying, Converter={StaticResource InverseBooleanConverter}}"/>
+                            <TextBox Text="{Binding SourceFolder, UpdateSourceTrigger=LostFocus}" Grid.Column="0" IsEnabled="{Binding IsCopying, Converter={StaticResource InverseBooleanConverter}}"/>
                             <Button Content="Suchen..." Grid.Column="1" Command="{Binding SelectSourceFolder}" IsEnabled="{Binding IsCopying, Converter={StaticResource InverseBooleanConverter}}"/>
                         </Grid>
                         <!--Found Folders and Files-->
