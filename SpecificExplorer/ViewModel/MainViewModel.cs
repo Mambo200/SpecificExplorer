@@ -55,6 +55,23 @@ namespace SpecificExplorer.ViewModel
 
                 if (!Directory.Exists(value))
                     return;
+
+                try
+                {
+                    FoundFiles = Directory.GetFiles(value, "*", SearchOption.AllDirectories).Length;
+                }
+                catch (Exception)
+                {
+                    FoundFiles = INVALIDNUMBER;
+                }
+                try
+                {
+                    FoundFolder = Directory.GetDirectories(value, "*", SearchOption.AllDirectories).Length;
+                }
+                catch (Exception)
+                {
+                    FoundFolder = INVALIDNUMBER;
+                }
             }
         }
 
@@ -74,6 +91,7 @@ namespace SpecificExplorer.ViewModel
         [Obsolete("Not finished Meshod", true)]
         private string[] GetAllFiles(string _folderPath)
         {
+            var files = new DirectoryInfo(_folderPath).GetFiles("*", SearchOption.AllDirectories).Where(x => (x.Attributes & System.IO.FileAttributes.Hidden) == 0);
             return null;
         }
 
@@ -273,7 +291,33 @@ namespace SpecificExplorer.ViewModel
 
             #region content of copying
             //System.Threading.Thread.Sleep(5000);
-            DirectoryInfo MainFolder = Directory.CreateDirectory(Path.Combine(SourceFolder, COPYFOLDERNAME));
+            DirectoryInfo MainFolder = null;
+            try
+            {
+                MainFolder = Directory.CreateDirectory(Path.Combine(DestinationFolder, COPYFOLDERNAME));
+            }
+            catch (Exception _ex)
+            {
+                StatusProgressState = TaskbarItemProgressState.Error;
+                MessageBox.Show($"Ein Fehler ist aufgetreten beim Erstellen des Ordners \"{Path.Combine(DestinationFolder, COPYFOLDERNAME)}\":" + Environment.NewLine + Environment.NewLine + _ex.Message,
+                    "Kopieren abgebrochen",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Stop);
+
+                Status1 = "Abbruch durch Fehler";
+                Status3 = string.Empty;
+
+                // make possible actions by user possible again
+                IsCopying = false;
+                NotifyOfPropertyChange(nameof(CanCopy));
+
+                // Update UI
+                StatusProgressState = TaskbarItemProgressState.None;
+                StatusProgressValue = 0;
+
+                return;
+
+            }
             string[] allFiles = null;
             try
             {
@@ -286,6 +330,9 @@ namespace SpecificExplorer.ViewModel
                     "Kopieren abgebrochen",
                     MessageBoxButton.OK,
                     MessageBoxImage.Stop);
+
+                Status1 = "Abbruch durch Fehler";
+                Status3 = string.Empty;
 
                 // make possible actions by user possible again
                 IsCopying = false;
@@ -306,7 +353,7 @@ namespace SpecificExplorer.ViewModel
                 Status1 = info.Name;
                 Status3 = $"{allFilesLength} / {count}";
                 DirectoryInfo directoryInfoSource = new DirectoryInfo(file);
-                string extension = directoryInfoSource.Extension == string.Empty ? directoryInfoSource.Extension : directoryInfoSource.Extension.Remove(0, 1);
+                string extension = directoryInfoSource.Extension == string.Empty ? directoryInfoSource.Extension : directoryInfoSource.Extension.Remove(0, 1).ToLower();
                 string folderToCopy = extension == string.Empty ? Path.Combine(MainFolder.FullName, "-") : Path.Combine(MainFolder.FullName, extension);
                 DirectoryInfo directoryInfoDestination = null;
                 if (!Directory.Exists(folderToCopy))
@@ -322,6 +369,8 @@ namespace SpecificExplorer.ViewModel
                             MessageBoxButton.OK,
                             MessageBoxImage.Stop);
 
+                        Status1 = "Abbruch durch Fehler";
+                        Status3 = string.Empty;
                         break;
                     }
                 }
@@ -336,7 +385,8 @@ namespace SpecificExplorer.ViewModel
 
                 try
                 {
-                    File.Copy(file, Path.Combine(folderToCopy, addition + info.Name));
+                    string destination = Path.Combine(folderToCopy, addition + info.Name);
+                    File.Copy(file, destination);
                 }
                 catch (Exception _ex)
                 {
@@ -346,6 +396,8 @@ namespace SpecificExplorer.ViewModel
                         MessageBoxButton.OK,
                         MessageBoxImage.Stop);
                     ;
+                    Status1 = "Abbruch durch Fehler";
+                    Status3 = string.Empty;
                     break;
 
                 }

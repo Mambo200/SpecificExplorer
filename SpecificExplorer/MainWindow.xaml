@@ -25,7 +25,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="19"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="27"/>
         </Grid.RowDefinitions>
         <!--#region Header-->
         <Menu Grid.Row="0">
